@@ -98,6 +98,7 @@ flowchart TB
 ## 8A) Persistence
 - Storage: Core Data (local only) for `ChatThread` and `ChatMessage`.
 - Retention: unlimited; user can “Clear all” chat history from Settings.
+- Clear All behavior: clears messages across all chats but preserves chat threads and their names (titles are not reset; counter not reset).
 - No server sync; data remains on-device.
 
 ## 9) Provider Abstraction (Functions the Chat needs)
@@ -142,13 +143,14 @@ Subject to API confirmation; keep flexible wrappers:
 - Generic generation failure → retry affordance.
 
 ## 13) Settings → Options Mapping
-- Style presets (temperature-only; topP fixed at 0.95):
+- Style presets (temperature-only; topP is model default = nil for all presets):
   - Creative: temperature = 0.9
   - Balanced (default): temperature = nil (use model default)
   - Precise: temperature = 0.25
 - Model variant: default Auto (no variant UI in v1).
 - UI surfaces style presets only; raw temperature/topP are not directly exposed.
 - Default preset: Balanced. Style is saved per chat and can be adjusted mid-thread (affects subsequent generations).
+- Guardrails: default ON for every new chat; per-chat toggle in the Settings sheet.
 
 ## 14) Privacy & Telemetry
 - All inference on-device. No raw prompts/outputs sent to servers in v1.

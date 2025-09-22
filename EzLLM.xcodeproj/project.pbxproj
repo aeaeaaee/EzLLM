@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
@@ -50,24 +50,18 @@
 /* Begin PBXFrameworksBuildPhase section */
 		638194FA2E815B1500D771E3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		638195072E815B1500D771E3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		638195112E815B1500D771E3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -105,14 +99,10 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				638194FF2E815B1500D771E3 /* EzLLM */,
 			);
 			name = EzLLM;
-			packageProductDependencies = (
-			);
 			productName = EzLLM;
 			productReference = 638194FD2E815B1500D771E3 /* EzLLM.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +124,6 @@
 				6381950D2E815B1500D771E3 /* EzLLMTests */,
 			);
 			name = EzLLMTests;
-			packageProductDependencies = (
-			);
 			productName = EzLLMTests;
 			productReference = 6381950A2E815B1500D771E3 /* EzLLMTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +145,6 @@
 				638195172E815B1500D771E3 /* EzLLMUITests */,
 			);
 			name = EzLLMUITests;
-			packageProductDependencies = (
-			);
 			productName = EzLLMUITests;
 			productReference = 638195142E815B1500D771E3 /* EzLLMUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -192,10 +178,11 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-HK",
 			);
 			mainGroup = 638194F42E815B1500D771E3;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = 638194FE2E815B1500D771E3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -210,48 +197,36 @@
 /* Begin PBXResourcesBuildPhase section */
 		638194FB2E815B1500D771E3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		638195082E815B1500D771E3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		638195122E815B1500D771E3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		638194F92E815B1500D771E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		638195062E815B1500D771E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		638195102E815B1500D771E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -269,7 +244,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		6381951C2E815B1500D771E3 /* Debug */ = {
+		6381951C2E815B1500D771E3 /* Debug configuration for PBXProject "EzLLM" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -330,7 +305,7 @@
 			};
 			name = Debug;
 		};
-		6381951D2E815B1500D771E3 /* Release */ = {
+		6381951D2E815B1500D771E3 /* Release configuration for PBXProject "EzLLM" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -383,7 +358,7 @@
 			};
 			name = Release;
 		};
-		6381951F2E815B1500D771E3 /* Debug */ = {
+		6381951F2E815B1500D771E3 /* Debug configuration for PBXNativeTarget "EzLLM" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -394,12 +369,14 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -414,18 +391,19 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
-		638195202E815B1500D771E3 /* Release */ = {
+		638195202E815B1500D771E3 /* Release configuration for PBXNativeTarget "EzLLM" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -436,12 +414,14 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -456,18 +436,19 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
-		638195222E815B1500D771E3 /* Debug */ = {
+		638195222E815B1500D771E3 /* Debug configuration for PBXNativeTarget "EzLLMTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -492,7 +473,7 @@
 			};
 			name = Debug;
 		};
-		638195232E815B1500D771E3 /* Release */ = {
+		638195232E815B1500D771E3 /* Release configuration for PBXNativeTarget "EzLLMTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -517,7 +498,7 @@
 			};
 			name = Release;
 		};
-		638195252E815B1500D771E3 /* Debug */ = {
+		638195252E815B1500D771E3 /* Debug configuration for PBXNativeTarget "EzLLMUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -541,7 +522,7 @@
 			};
 			name = Debug;
 		};
-		638195262E815B1500D771E3 /* Release */ = {
+		638195262E815B1500D771E3 /* Release configuration for PBXNativeTarget "EzLLMUITests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -571,37 +552,33 @@
 		638194F82E815B1500D771E3 /* Build configuration list for PBXProject "EzLLM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6381951C2E815B1500D771E3 /* Debug */,
-				6381951D2E815B1500D771E3 /* Release */,
+				6381951C2E815B1500D771E3 /* Debug configuration for PBXProject "EzLLM" */,
+				6381951D2E815B1500D771E3 /* Release configuration for PBXProject "EzLLM" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		6381951E2E815B1500D771E3 /* Build configuration list for PBXNativeTarget "EzLLM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6381951F2E815B1500D771E3 /* Debug */,
-				638195202E815B1500D771E3 /* Release */,
+				6381951F2E815B1500D771E3 /* Debug configuration for PBXNativeTarget "EzLLM" */,
+				638195202E815B1500D771E3 /* Release configuration for PBXNativeTarget "EzLLM" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		638195212E815B1500D771E3 /* Build configuration list for PBXNativeTarget "EzLLMTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				638195222E815B1500D771E3 /* Debug */,
-				638195232E815B1500D771E3 /* Release */,
+				638195222E815B1500D771E3 /* Debug configuration for PBXNativeTarget "EzLLMTests" */,
+				638195232E815B1500D771E3 /* Release configuration for PBXNativeTarget "EzLLMTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		638195242E815B1500D771E3 /* Build configuration list for PBXNativeTarget "EzLLMUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				638195252E815B1500D771E3 /* Debug */,
-				638195262E815B1500D771E3 /* Release */,
+				638195252E815B1500D771E3 /* Debug configuration for PBXNativeTarget "EzLLMUITests" */,
+				638195262E815B1500D771E3 /* Release configuration for PBXNativeTarget "EzLLMUITests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

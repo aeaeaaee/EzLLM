@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ChatUI.swift
 //  EzLLM
 //
 //  Created by Frety Yeung on 22/9/2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ChatUI: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +20,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ChatUI()
 }

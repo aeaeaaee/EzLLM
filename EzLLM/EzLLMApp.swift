@@ -11,7 +11,7 @@ import SwiftUI
 struct EzLLMApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ChatUI()
         }
     }
 }

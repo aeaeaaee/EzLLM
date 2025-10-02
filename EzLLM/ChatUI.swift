@@ -22,7 +22,8 @@ struct ChatUI: View {
                     chats: $chats,
                     selectedChatIndex: $selectedChatIndex,
                     onNewChat: { newChat() },
-                    onOpenSettings: { showSettings = true }
+                    onOpenSettings: { showSettings = true },
+                    availableWidth: geo.size.width
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -41,7 +42,6 @@ struct ChatUI: View {
                 )
                 .frame(width: min(320, geo.size.width * 0.85), alignment: .top)
                 .frame(maxHeight: .infinity, alignment: .top)
-                .background(.ultraThinMaterial)
                 .ignoresSafeArea(edges: .vertical)
                 .offset(x: isSidebarOpen ? 0 : -min(320, geo.size.width * 0.85))
             }
@@ -69,6 +69,7 @@ struct ChatUI: View {
         @Binding var selectedChatIndex: Int
         var onNewChat: () -> Void
         var onOpenSettings: () -> Void
+        var availableWidth: CGFloat
 
         // Sample messages to resemble iMessage layout
         @State private var messages: [UIMessage] = [
@@ -89,7 +90,9 @@ struct ChatUI: View {
                             .font(.system(size: 18, weight: .medium))
                             .padding(8)
                     }
-
+                    
+                    Spacer()
+                    
                     HStack(spacing: 8) {
                         if isRenaming {
                             TextField("Chat name", text: Binding(
@@ -101,7 +104,7 @@ struct ChatUI: View {
                             .onSubmit { isRenaming = false }
                         } else {
                             Text((0..<chats.count).contains(selectedChatIndex) ? chats[selectedChatIndex] : "Chat")
-                                .font(.headline)
+                                .font(.title3.bold())
                                 .lineLimit(1)
                         }
                         Button { isRenaming.toggle() } label: {
@@ -110,7 +113,7 @@ struct ChatUI: View {
                                 .padding(6)
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .center)
 
                     Button { onNewChat() } label: {
                         Image(systemName: "plus")
@@ -126,7 +129,7 @@ struct ChatUI: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 6)
                 .padding(.bottom, 8)
-                .background(.ultraThinMaterial)
+                .glassEffect(.identity)
                 .overlay(Divider(), alignment: .bottom)
 
                 // Messages (iMessage-like bubbles)
@@ -144,14 +147,14 @@ struct ChatUI: View {
                 }
 
                 // Composer (no-op Send for now)
-                HStack(spacing: 8) {
+                HStack(alignment: .center, spacing: 8) {
                     ZStack(alignment: .trailing) {
-                        TextField("iMessage", text: $inputText, axis: .vertical)
+                        TextField("Put your prompt here:", text: $inputText, axis: .vertical)
                             .lineLimit(1...4)
-                            .padding(.vertical, 8)
+                            .glassEffect(.regular.tint(.yellow),in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .frame(height: 56)
                             .padding(.leading, 12)
-                            .padding(.trailing, 28) // reserve space for clear button
-
+                        
                         if !inputText.isEmpty {
                             Button {
                                 inputText = ""
@@ -163,27 +166,15 @@ struct ChatUI: View {
                             .padding(.trailing, 8)
                         }
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(Color(.secondarySystemBackground))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                    )
 
                     Button(action: { /* no-op for now */ }) {
                         Image(systemName: "paperplane.fill")
-                            .font(.system(size: 16, weight: .semibold))
-                            .padding(8)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.glassProminent)
                     .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 10)
-                .background(.ultraThinMaterial)
-                .overlay(Divider(), alignment: .top)
             }
         }
 
@@ -198,7 +189,7 @@ struct ChatUI: View {
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(18)
-                        .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: .trailing)
+                        .frame(maxWidth: availableWidth * 0.7, alignment: .trailing)
                 } else {
                     Text(msg.text)
                         .padding(.horizontal, 12)
@@ -207,7 +198,7 @@ struct ChatUI: View {
                         .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color.gray.opacity(0.2), lineWidth: 1))
                         .cornerRadius(18)
                         .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
-                        .frame(maxWidth: UIScreen.main.bounds.width * 0.7, alignment: .leading)
+                        .frame(maxWidth: availableWidth * 0.7, alignment: .leading)
                     Spacer(minLength: 24)
                 }
             }
@@ -227,9 +218,9 @@ struct ChatUI: View {
                         .font(.headline)
                     Spacer()
                 }
-                .padding(12)
-                .background(.thinMaterial)
-                .overlay(Divider(), alignment: .bottom)
+                .padding(.vertical, 10)
+                .glassEffect()
+                .overlay(Divider(), alignment: .top)
 
                 List {
                     ForEach(chats.indices, id: \.self) { idx in

@@ -43,6 +43,7 @@ struct ChatUI: View {
                 .frame(width: min(320, geo.size.width * 0.85), alignment: .top)
                 .frame(maxHeight: .infinity, alignment: .top)
                 .ignoresSafeArea(edges: .vertical)
+                .background(.ultraThinMaterial)
                 .offset(x: isSidebarOpen ? 0 : -min(320, geo.size.width * 0.85))
             }
             .animation(.spring(response: 0.5, dampingFraction: 0.85, blendDuration: 0.2), value: isSidebarOpen)
@@ -129,13 +130,20 @@ struct ChatUI: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 6)
                 .padding(.bottom, 8)
-                .glassEffect(.identity)
-                .overlay(Divider(), alignment: .bottom)
+                .background(
+                    LinearGradient(
+                        colors: [Color.black.opacity(0.05), Color.clear],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                
+                Divider().frame(height:2).background(Color.gray)
 
                 // Messages (iMessage-like bubbles)
                 ScrollViewReader { proxy in
                     ScrollView {
-                        LazyVStack(spacing: 8) {
+                        VStack(spacing: 8) {
                             ForEach(messages) { msg in
                                 messageRow(msg)
                                     .id(msg.id)
@@ -145,15 +153,18 @@ struct ChatUI: View {
                         .padding(.vertical, 8)
                     }
                 }
+                
+                Divider().frame(height:2).background(Color.gray)
 
                 // Composer (no-op Send for now)
                 HStack(alignment: .center, spacing: 8) {
                     ZStack(alignment: .trailing) {
-                        TextField("Put your prompt here:", text: $inputText, axis: .vertical)
-                            .lineLimit(1...4)
-                            .glassEffect(.regular.tint(.yellow),in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            .frame(height: 56)
-                            .padding(.leading, 12)
+                        TextField("Entry",text: $inputText,prompt: Text(" Put your prompt here: ") ,axis: .vertical)
+                            .textFieldStyle(.automatic)
+                            .font(.body)
+                            .lineLimit(1...)
+                            .glassEffect()
+                            .padding(.vertical, 8)
                         
                         if !inputText.isEmpty {
                             Button {
@@ -172,9 +183,17 @@ struct ChatUI: View {
                     }
                     .buttonStyle(.glassProminent)
                     .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .padding(.vertical, 4)
                 }
                 .padding(.horizontal, 12)
-                .padding(.vertical, 10)
+                .padding(.vertical, 5)
+                .background(
+                    LinearGradient(
+                        colors: [Color.clear, Color.gray.opacity(0.05)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
             }
         }
 

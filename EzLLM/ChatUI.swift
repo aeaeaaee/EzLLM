@@ -99,6 +99,11 @@ struct ChatUI: View {
         @State private var inputText: String = ""
         @State private var isRenaming: Bool = false
         @FocusState private var isNameFieldFocused: Bool
+        @FocusState private var isComposerFocused: Bool
+
+        private var isSendEnabled: Bool {
+            !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
 
         var body: some View {
             VStack(spacing: 0) {
@@ -119,6 +124,7 @@ struct ChatUI: View {
                         .safeAreaInset(edge: .top) {
                             Color.clear.frame(height: headerHeight + restOffset)
                         }
+                        .onTapGesture { isComposerFocused = false }
                     }
                     headerBar()
                         .frame(maxWidth: .infinity, alignment: .top)
@@ -131,6 +137,7 @@ struct ChatUI: View {
                         TextField("Entry",text: $inputText,prompt: Text("Put your prompt here: ") ,axis: .vertical)
                             .font(.body)
                             .lineLimit(1...)
+                            .focused($isComposerFocused)
                             .padding(.horizontal, 12)
                         
                         if !inputText.isEmpty {
@@ -150,13 +157,16 @@ struct ChatUI: View {
 
                     Button(action: { /* no-op for now */ }) {
                         Image(systemName: "paperplane.fill")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(Color.white)
                             .frame(width: composerControlHeight, height: composerControlHeight)
-                            .glassEffect(.regular.interactive(), in: Circle())
+                            .background(
+                                Circle().fill(isSendEnabled ? Color.blue : Color.gray)
+                            )
                             .contentShape(Circle())
                     }
                     .buttonStyle(.plain)
-                    .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(!isSendEnabled)
                     .padding(.vertical, 4)
                 }
                 .padding(.horizontal, 12)
@@ -206,7 +216,7 @@ struct ChatUI: View {
 
                 HStack(spacing: 12) {
                         Button { withAnimation { isSidebarOpen.toggle() } } label: {
-                            Image(systemName: "line.3.horizontal")
+                            Image(systemName: "sidebar.left")
                                 .font(.system(size: 18, weight: .medium))
                                 .frame(width: 44, height: 44)
                                 .glassEffect(.regular.interactive(), in: Circle())
@@ -273,6 +283,8 @@ struct ChatUI: View {
                     endPoint: .bottom
                 )
             )
+            .contentShape(Rectangle())
+            .onTapGesture { isComposerFocused = false }
             .ignoresSafeArea(edges: .top)
         }
 

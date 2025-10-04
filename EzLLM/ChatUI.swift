@@ -12,6 +12,7 @@ struct ChatUI: View {
     // Simple chat list state (placeholder)
     @State private var chats: [String] = ["Chat1", "Chat2"]
     @State private var selectedChatIndex: Int = 0
+    @State private var avatarColor: Color = .black
 
     var body: some View {
         GeometryReader { geo in
@@ -23,6 +24,7 @@ struct ChatUI: View {
                     selectedChatIndex: $selectedChatIndex,
                     onNewChat: { newChat() },
                     onOpenSettings: { showSettings = true },
+                    avatarColor: $avatarColor,
                     availableWidth: geo.size.width
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -43,12 +45,20 @@ struct ChatUI: View {
                 .frame(width: min(320, geo.size.width * 0.85), alignment: .top)
                 .frame(maxHeight: .infinity, alignment: .top)
                 .ignoresSafeArea(edges: .vertical)
-                .background(.ultraThinMaterial)
                 .offset(x: isSidebarOpen ? 0 : -min(320, geo.size.width * 0.85))
             }
             .animation(.spring(response: 0.5, dampingFraction: 0.85, blendDuration: 0.2), value: isSidebarOpen)
         }
-        .sheet(isPresented: $showSettings) { Text("Settings").padding() }
+        .sheet(isPresented: $showSettings) {
+            NavigationStack {
+                Form {
+                    Section("Appearance") {
+                        ColorPicker("Avatar color", selection: $avatarColor, supportsOpacity: false)
+                    }
+                }
+                .navigationTitle("Settings")
+            }
+        }
     }
 
     private func newChat() {
@@ -70,6 +80,7 @@ struct ChatUI: View {
         @Binding var selectedChatIndex: Int
         var onNewChat: () -> Void
         var onOpenSettings: () -> Void
+        @Binding var avatarColor: Color
         var availableWidth: CGFloat
 
         // Sample messages to resemble iMessage layout
@@ -89,56 +100,68 @@ struct ChatUI: View {
                     Button { withAnimation { isSidebarOpen.toggle() } } label: {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 18, weight: .medium))
-                            .padding(8)
+                            .frame(width: 44, height: 44)
+                            .glassEffect(.regular.interactive(),in: Circle())
+                            .contentShape(Circle())
                     }
                     
                     Spacer()
                     
-                    HStack(spacing: 8) {
-                        if isRenaming {
-                            TextField("Chat name", text: Binding(
-                                get: { (0..<chats.count).contains(selectedChatIndex) ? chats[selectedChatIndex] : "" },
-                                set: { name in if (0..<chats.count).contains(selectedChatIndex) { chats[selectedChatIndex] = name } }
-                            ))
-                            .textFieldStyle(.roundedBorder)
-                            .frame(maxWidth: 220)
-                            .onSubmit { isRenaming = false }
-                        } else {
-                            Text((0..<chats.count).contains(selectedChatIndex) ? chats[selectedChatIndex] : "Chat")
-                                .font(.title3.bold())
-                                .lineLimit(1)
-                        }
+                    HStack(spacing: 4) {
+                        Image(systemName: "person.crop.circle.fill")
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(avatarColor)
+                            .font(.system(size: 18))
+                            .frame(width: 28, height: 28)
+
+                        TextField("Chat name", text: Binding(
+                            get: { (0..<chats.count).contains(selectedChatIndex) ? chats[selectedChatIndex] : "" },
+                            set: { name in if (0..<chats.count).contains(selectedChatIndex) { chats[selectedChatIndex] = name } }
+                        ))
+                        .textFieldStyle(.plain)
+                        .font(.body)
+                        .frame(maxWidth: 60, alignment: .center)
+                        .truncationMode(.tail)
+                        .layoutPriority(1)
+                        .disabled(!isRenaming)
+                        .onSubmit { isRenaming = false }
+
                         Button { isRenaming.toggle() } label: {
-                            Image(systemName: "pencil")
-                                .font(.system(size: 16, weight: .regular))
-                                .padding(6)
+                            Image(systemName: isRenaming ? "checkmark" : "pencil")
+                                .font(.system(size: 16, weight: .semibold))
+                                .frame(width: 28, height: 28)
+                                .contentShape(Circle())
                         }
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .glassEffect(.regular.interactive(), in: Capsule())
+                    .contentShape(Capsule())
+                    .frame(maxWidth: 400)
                     .frame(maxWidth: .infinity, alignment: .center)
 
-                    Button { onNewChat() } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 18, weight: .semibold))
-                            .padding(6)
-                    }
+                    Spacer()
+                    
                     Button { onOpenSettings() } label: {
                         Image(systemName: "gear")
-                            .font(.system(size: 18, weight: .semibold))
-                            .padding(6)
+                            .font(.system(size: 18, weight: .medium))
+                            .frame(width: 44, height: 44)
+                            .glassEffect(.regular.interactive(),in: Circle())
+                            .contentShape(Circle())
                     }
                 }
+                
                 .padding(.horizontal, 12)
                 .padding(.top, 6)
                 .padding(.bottom, 8)
                 .background(
                     LinearGradient(
-                        colors: [Color.black.opacity(0.05), Color.clear],
+                        colors: [Color.black.opacity(0.1), Color.clear],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
                 
-                Divider().frame(height:2).background(Color.gray)
 
                 // Messages (iMessage-like bubbles)
                 ScrollViewReader { proxy in
@@ -160,7 +183,6 @@ struct ChatUI: View {
                 HStack(alignment: .center, spacing: 8) {
                     ZStack(alignment: .trailing) {
                         TextField("Entry",text: $inputText,prompt: Text(" Put your prompt here: ") ,axis: .vertical)
-                            .textFieldStyle(.automatic)
                             .font(.body)
                             .lineLimit(1...)
                             .glassEffect()

@@ -86,6 +86,7 @@ struct ChatUI: View {
         var topSafeInset: CGFloat
         let restOffset: CGFloat = 5
         let headerHeight: CGFloat = 40
+        let composerControlHeight: CGFloat = 44
         
 
         // Sample messages to resemble iMessage layout
@@ -123,18 +124,14 @@ struct ChatUI: View {
                         .frame(maxWidth: .infinity, alignment: .top)
                         .zIndex(1)
                 }
-                
-                
-                Divider().frame(height:2).background(Color.gray)
 
                 // Composer (no-op Send for now)
                 HStack(alignment: .center, spacing: 8) {
                     ZStack(alignment: .trailing) {
-                        TextField("Entry",text: $inputText,prompt: Text(" Put your prompt here: ") ,axis: .vertical)
+                        TextField("Entry",text: $inputText,prompt: Text("Put your prompt here: ") ,axis: .vertical)
                             .font(.body)
                             .lineLimit(1...)
-                            .glassEffect()
-                            .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
                         
                         if !inputText.isEmpty {
                             Button {
@@ -147,11 +144,18 @@ struct ChatUI: View {
                             .padding(.trailing, 8)
                         }
                     }
+                    .frame(height: composerControlHeight)
+                    .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 12))
+                    .contentShape(RoundedRectangle(cornerRadius: 12))
 
                     Button(action: { /* no-op for now */ }) {
                         Image(systemName: "paperplane.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .frame(width: composerControlHeight, height: composerControlHeight)
+                            .glassEffect(.regular.interactive(), in: Circle())
+                            .contentShape(Circle())
                     }
-                    .buttonStyle(.glassProminent)
+                    .buttonStyle(.plain)
                     .disabled(inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .padding(.vertical, 4)
                 }
@@ -159,7 +163,7 @@ struct ChatUI: View {
                 .padding(.vertical, 5)
                 .background(
                     LinearGradient(
-                        colors: [Color.clear, Color.gray.opacity(0.05)],
+                        colors: [Color.clear, Color.black.opacity(0.05)],
                         startPoint: .top,
                         endPoint: .bottom
                     )

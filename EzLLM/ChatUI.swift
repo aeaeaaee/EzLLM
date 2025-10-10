@@ -8,12 +8,16 @@ struct ChatUI: View {
     // Sidebar & sheet state
     @State private var isSidebarOpen: Bool = false
     @State private var showSettings: Bool = false
-
+    
     // Simple chat list state (placeholder)
     @State private var chats: [String] = ["Chat1", "Chat2"]
     @State private var selectedChatIndex: Int = 0
     @State private var avatarColor: Color = .black
-
+    
+    init(initialIsSidebarOpen: Bool = false) {
+        self._isSidebarOpen = State(initialValue: initialIsSidebarOpen)
+    }
+    
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
@@ -29,18 +33,19 @@ struct ChatUI: View {
                     topSafeInset: geo.safeAreaInsets.top
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+                
                 // Dim background when drawer is open
                 if isSidebarOpen {
                     Color.black.opacity(0.25)
                         .ignoresSafeArea()
                         .onTapGesture { withAnimation { isSidebarOpen = false } }
                 }
-
+                
                 // Slide-in ChatList drawer
                 ChatUI.ChatList(
                     chats: $chats,
                     selectedChatIndex: $selectedChatIndex,
+                    topSafeInset: geo.safeAreaInsets.top,
                     onSelect: { _ in withAnimation { isSidebarOpen = false } }
                 )
                 .frame(width: min(320, geo.size.width * 0.85), alignment: .top)
@@ -61,20 +66,20 @@ struct ChatUI: View {
             }
         }
     }
-
+    
     private func newChat() {
         let next = "Chat\(chats.count + 1)"
         chats.insert(next, at: 0)
         selectedChatIndex = 0
     }
-
+    
     // MARK: - Nested types (UI only)
     private struct UIMessage: Identifiable, Equatable {
         let id = UUID()
         let isUser: Bool
         let text: String
     }
-
+    
     private struct Chat: View {
         @Binding var isSidebarOpen: Bool
         @Binding var chats: [String]
@@ -85,10 +90,10 @@ struct ChatUI: View {
         var availableWidth: CGFloat
         var topSafeInset: CGFloat
         let restOffset: CGFloat = 5
-        let headerHeight: CGFloat = 40
+        let headerHeight: CGFloat = 60
         let composerControlHeight: CGFloat = 44
         
-
+        
         // Sample messages to resemble iMessage layout
         @State private var messages: [UIMessage] = [
             .init(isUser: false, text: "Hey there!"),
@@ -100,11 +105,11 @@ struct ChatUI: View {
         @State private var isRenaming: Bool = false
         @FocusState private var isNameFieldFocused: Bool
         @FocusState private var isComposerFocused: Bool
-
+        
         private var isSendEnabled: Bool {
             !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
-
+        
         var body: some View {
             VStack(spacing: 0) {
                 // Messages (iMessage-like bubbles) with overlay header
@@ -122,7 +127,7 @@ struct ChatUI: View {
                         }
                         // Simple approach: constant inset so first bubble rests below header, no equations
                         .safeAreaInset(edge: .top) {
-                            Color.clear.frame(height: headerHeight + restOffset)
+                            Color.clear.frame(height: 55)
                         }
                         .onTapGesture { isComposerFocused = false }
                     }
@@ -130,7 +135,7 @@ struct ChatUI: View {
                         .frame(maxWidth: .infinity, alignment: .top)
                         .zIndex(1)
                 }
-
+                
                 // Composer (no-op Send for now)
                 HStack(alignment: .center, spacing: 8) {
                     ZStack(alignment: .trailing) {
@@ -154,7 +159,7 @@ struct ChatUI: View {
                     .frame(height: composerControlHeight)
                     .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 12))
                     .contentShape(RoundedRectangle(cornerRadius: 12))
-
+                    
                     Button(action: { /* no-op for now */ }) {
                         Image(systemName: "paperplane.fill")
                             .font(.system(size: 20, weight: .semibold))
@@ -180,7 +185,7 @@ struct ChatUI: View {
                 )
             }
         }
-
+        
         @ViewBuilder
         private func messageRow(_ msg: UIMessage) -> some View {
             HStack(alignment: .bottom) {
@@ -207,48 +212,45 @@ struct ChatUI: View {
             }
             .padding(.horizontal, 4)
         }
-
+        
         @ViewBuilder
         private func headerBar() -> some View {
             VStack(spacing: 0) {
-                // Fill the status bar area
-                Color.clear.frame(height: topSafeInset)
-
                 HStack(spacing: 12) {
-                        Button { withAnimation { isSidebarOpen.toggle() } } label: {
-                            Image(systemName: "sidebar.left")
-                                .font(.system(size: 18, weight: .medium))
-                                .frame(width: 44, height: 44)
-                                .glassEffect(.regular.interactive(), in: Circle())
-                                .contentShape(Circle())
+                    Button { withAnimation { isSidebarOpen.toggle() } } label: {
+                        Image(systemName: "sidebar.left")
+                            .font(.system(size: 18, weight: .medium))
+                            .frame(width: 44, height: 44)
+                            .glassEffect(.regular.interactive(), in: Circle())
+                            .contentShape(Circle())
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 4) {
+                        Image(systemName: "person.crop.circle.fill")
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(avatarColor)
+                            .font(.system(size: 18))
+                            .frame(width: 28, height: 28)
+                        
+                        TextField("Chat name", text: Binding(
+                            get: { (0..<chats.count).contains(selectedChatIndex) ? chats[selectedChatIndex] : "" },
+                            set: { name in if (0..<chats.count).contains(selectedChatIndex) { chats[selectedChatIndex] = name } }
+                        ))
+                        .textFieldStyle(.plain)
+                        .font(.body)
+                        .frame(maxWidth: 60, alignment: .center)
+                        .truncationMode(.tail)
+                        .layoutPriority(1)
+                        .disabled(!isRenaming)
+                        .focused($isNameFieldFocused)
+                        .onSubmit {
+                            isRenaming = false
+                            isNameFieldFocused = false
                         }
-
-                        Spacer()
-
-                        HStack(spacing: 4) {
-                            Image(systemName: "person.crop.circle.fill")
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(avatarColor)
-                                .font(.system(size: 18))
-                                .frame(width: 28, height: 28)
-
-                            TextField("Chat name", text: Binding(
-                                get: { (0..<chats.count).contains(selectedChatIndex) ? chats[selectedChatIndex] : "" },
-                                set: { name in if (0..<chats.count).contains(selectedChatIndex) { chats[selectedChatIndex] = name } }
-                            ))
-                            .textFieldStyle(.plain)
-                            .font(.body)
-                            .frame(maxWidth: 60, alignment: .center)
-                            .truncationMode(.tail)
-                            .layoutPriority(1)
-                            .disabled(!isRenaming)
-                            .focused($isNameFieldFocused)
-                            .onSubmit {
-                                isRenaming = false
-                                isNameFieldFocused = false
-                            }
-
-                            Button {
+                        
+                        Button {
                             withAnimation { isRenaming.toggle() }
                             isNameFieldFocused = isRenaming
                         } label: {
@@ -258,22 +260,22 @@ struct ChatUI: View {
                                 .contentShape(Circle())
                         }
                     }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .glassEffect(.regular.interactive(), in: Capsule())
-                        .contentShape(Capsule())
-
-                        Spacer()
-
-                        Button { onOpenSettings() } label: {
-                            Image(systemName: "gear")
-                                .font(.system(size: 18, weight: .medium))
-                                .frame(width: 44, height: 44)
-                                .glassEffect(.regular.interactive(), in: Circle())
-                                .contentShape(Circle())
-                        }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    
+                    
+                    Spacer()
+                    
+                    Button { onOpenSettings() } label: {
+                        Image(systemName: "gear")
+                            .font(.system(size: 18, weight: .medium))
+                            .frame(width: 44, height: 44)
+                            .glassEffect(.regular.interactive(), in: Circle())
+                            .contentShape(Circle())
+                    }
                 }
                 .padding(.horizontal,12)
+                .padding(.vertical,8)
             }
             .frame(maxWidth: .infinity, alignment: .top)
             .background(
@@ -283,51 +285,69 @@ struct ChatUI: View {
                     endPoint: .bottom
                 )
             )
+            .background(.regularMaterial)
+            .safeAreaInset(edge: .top) {
+                Color.clear.frame(height: topSafeInset)
+            }
+            .clipShape(Rectangle())
             .contentShape(Rectangle())
             .onTapGesture { isComposerFocused = false }
             .ignoresSafeArea(edges: .top)
         }
-
+        
     }
-
+    
     private struct ChatList: View {
         @Binding var chats: [String]
         @Binding var selectedChatIndex: Int
+        var topSafeInset: CGFloat
         var onSelect: (Int) -> Void
-
-        init(chats: Binding<[String]>, selectedChatIndex: Binding<Int>, onSelect: @escaping (Int) -> Void) {
+        
+        init(chats: Binding<[String]>, selectedChatIndex: Binding<Int>, topSafeInset: CGFloat, onSelect: @escaping (Int) -> Void) {
             self._chats = chats
             self._selectedChatIndex = selectedChatIndex
+            self.topSafeInset = topSafeInset
             self.onSelect = onSelect
         }
-
+        
         var body: some View {
-            VStack(spacing: 0) {
-                HStack {
+            ZStack(alignment: .topLeading) {
+                // Bottom: single rectangular glass background for the whole drawer
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .glassEffect(.clear.interactive(), in: Rectangle())
+                    .clipShape(Rectangle())
+                    .ignoresSafeArea()
+                
+                // Top: content
+                VStack(alignment: .leading, spacing: 8) {
                     Text("Chats")
-                        .font(.headline)
-                }
-                .padding(.vertical, 10)
-                .glassEffect()
-                .overlay(Divider(), alignment: .top)
-
-                List {
-                    ForEach(chats.indices, id: \.self) { idx in
-                        HStack {
-                            Text(chats[idx]).lineLimit(1)
-                            Spacer()
-                            if idx == selectedChatIndex {
-                                Image(systemName: "checkmark").foregroundStyle(.tint)
+                        .font(.title.bold())
+                        .padding(.top, topSafeInset)
+                        .padding(.horizontal, 12)
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(Array(chats.indices), id: \.self) { idx in
+                                HStack {
+                                    Text(chats[idx]).lineLimit(1)
+                                    Spacer()
+                                    if idx == selectedChatIndex {
+                                        Image(systemName: "checkmark").foregroundStyle(.tint)
+                                    }
+                                }
+                                .padding(.horizontal, 12)
+                                .frame(height: 44)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    selectedChatIndex = idx
+                                    onSelect(idx)
+                                }
+                                Divider()
                             }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedChatIndex = idx
-                            onSelect(idx)
                         }
                     }
                 }
-                .listStyle(.plain)
             }
         }
     }
@@ -335,4 +355,8 @@ struct ChatUI: View {
 
 #Preview {
     ChatUI()
+}
+
+#Preview("Sidebar") {
+    ChatUI(initialIsSidebarOpen: true)
 }
